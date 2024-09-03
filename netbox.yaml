@@ -1,0 +1,141 @@
+# Seed data for Custom GPT model for NetBox API
+
+circuits:
+  - circuit-terminations
+  - circuit-types
+  - circuits
+  - provider-accounts
+  - provider-networks
+  - providers
+
+core:
+  - data-files
+  - data-sources
+  - jobs
+
+dcim:
+  - cable-terminations
+  - cables
+  - connected-device
+  - console-port-templates
+  - console-ports
+  - console-server-port-templates
+  - console-server-ports
+  - device-bay-templates
+  - device-bays
+  - device-roles
+  - device-types
+  - devices
+  - front-port-templates
+  - front-ports
+  - interface-templates
+  - interfaces
+  - inventory-item-roles
+  - inventory-item-templates
+  - inventory-items
+  - locations
+  - manufacturers
+  - module-bay-templates
+  - module-bays
+  - module-types
+  - modules
+  - platforms
+  - power-feeds
+  - power-outlet-templates
+  - power-outlets
+  - power-panels
+  - power-port-templates
+  - power-ports
+  - rack-reservations
+  - rack-roles
+  - racks
+  - rear-port-templates
+  - rear-ports
+  - regions
+  - site-groups
+  - sites
+  - virtual-chassis
+  - virtual-device-contexts
+
+extras:
+  - bookmarks
+  - config-contexts
+  - config-templates
+  - custom-field-choice-sets
+  - custom-fields
+  - custom-links
+  - dashboard
+  - event-rules
+  - export-templates
+  - image-attachments
+  - journal-entries
+  - object-changes
+  - object-types
+  - saved-filters
+  - scripts
+  - tags
+  - webhooks
+
+ipam:
+  - aggregates
+  - asn-ranges
+  - asns
+  - fhrp-group-assignments
+  - fhrp-groups
+  - ip-addresses
+  - ip-ranges
+  - prefixes
+  - rirs
+  - roles
+  - route-targets
+  - service-templates
+  - services
+  - vlan-groups
+  - vlans
+  - vrfs
+
+schema:
+  - schema
+
+status:
+  - status
+
+tenancy:
+  - contact-assignments
+  - contact-groups
+  - contact-roles
+  - contacts
+  - tenant-groups
+  - tenants
+
+users:
+  - config
+  - groups
+  - permissions
+  - tokens
+  - users
+
+virtualization:
+  - cluster-groups
+  - cluster-types
+  - clusters
+  - interfaces
+  - virtual-disks
+  - virtual-machines
+
+vpn:
+  - ike-policies
+  - ike-proposals
+  - ipsec-policies
+  - ipsec-profiles
+  - ipsec-proposals
+  - l2vpn-terminations
+  - l2vpns
+  - tunnel-groups
+  - tunnel-terminations
+  - tunnels
+
+wireless:
+  - wireless-lan-groups
+  - wireless-lans
+  - wireless-links

@@ -1,0 +1,9 @@
+default:
+  nokia_srl:
+    username: "admin"
+    password: "NokiaSrl1!"
+
+overwrite:
+  router1.example.com:
+    username: "special_user1"
+    password: "special_password1"

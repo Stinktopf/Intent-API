@@ -1,0 +1,36 @@
+# Seed data for custom GPT model for network device configuration changes and show commands
+
+examples:
+  - description: Example of enabling an interface on a Nokia SR Linux device
+    request:
+      host: "172.20.20.2"
+      device_type: "nokia_srl"
+      commands:
+        - "enter candidate"
+        - "interface ethernet-1/1 admin-state enable"
+        - "commit now"
+
+  - description: Example of disabling an interface on a Nokia SR Linux device
+    request:
+      host: "172.20.20.3"
+      device_type: "nokia_srl"
+      commands:
+        - "enter candidate"
+        - "interface ethernet-1/2 admin-state disable"
+        - "commit now"
+
+  - description: Example of adding a description to an interface on a Nokia SR Linux device
+    request:
+      host: "172.20.20.4"
+      device_type: "nokia_srl"
+      commands:
+        - "enter candidate"
+        - 'interface ethernet-1/1 description "This is a description"'
+        - "commit now"
+
+  - description: Example of running a show command to display interfaces on a Nokia SR Linux device
+    request:
+      host: "172.20.20.6"
+      device_type: "nokia_srl"
+      commands:
+        - "show interface"
