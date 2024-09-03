@@ -28,8 +28,8 @@ Before running Intent API, ensure you have the following prerequisites installed
 1. Clone the repository:
 
    ```bash
-   git clone git@github.com:Stinktopf/intent-api.git
-   cd intent-api
+   git clone https://github.com/Stinktopf/Intent-API.git
+   cd Intent-API
    ```
 
 2. Install dependencies:
