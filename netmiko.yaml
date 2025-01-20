@@ -1,4 +1,4 @@
-# Seed data for custom GPT model for network device configuration changes and show commands
+# Examples for Custom GPT for network device configuration and show commands
 
 examples:
   - description: Example of enabling an interface on a Nokia SR Linux device
@@ -28,9 +28,30 @@ examples:
         - 'interface ethernet-1/1 description "This is a description"'
         - "commit now"
 
-  - description: Example of running a show command to display interfaces on a Nokia SR Linux device
+  - description: Example of running a show command to display all (loopback) interfaces on a Nokia SR Linux device
     request:
       host: "172.20.20.6"
       device_type: "nokia_srl"
       commands:
         - "show interface"
+
+  - description: Example of configuring and enabling loopback interface loX
+    request:
+      host: "172.20.20.2"
+      device_type: "nokia_srl"
+      commands:
+        - "enter candidate"
+        - "set interface lo1 admin-state enable"
+        - "set interface lo1 subinterface 0 admin-state enable"
+        - "set interface lo1 subinterface 0 ipv4 address 10.10.10.1/32"
+        - "set interface lo1 subinterface 0 ipv4 admin-state enable"
+        - "set network-instance default interface lo1.0"
+        - "commit now"
+
+  - description: Example of verifying loopback interface lo1 (use the right network-instance)
+    request:
+      host: "172.20.20.2"
+      device_type: "nokia_srl"
+      commands:
+        - "show interface lo1"
+        - "ping network-instance default 10.10.10.1 -c 1"

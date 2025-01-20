@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from typing import List, Any
+from typing import List, Any, Optional
 
 import yaml
 import ngrok
@@ -17,12 +17,13 @@ from netmiko import (
 )
 from pydantic import BaseModel, Field, validator
 
+
 # Load environment variables from .env file
 load_dotenv()
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="Netrunner API",
+    title="Intent API",
     description="API for managing network devices and interacting with NetBox",
     version="1.0.0",
 )
@@ -90,13 +91,53 @@ yaml_path = os.getenv("ROUTER_CONFIG_YAML", "router_config.yaml")
 router_config = load_router_config(yaml_path)
 
 
+class Command(BaseModel):
+    command: str = Field(..., description="The command to be executed on the device")
+    use_timing: bool = Field(
+        False, description="Indicates if the command should use timing methods"
+    )
+    delay_factor: Optional[float] = Field(
+        None,
+        description="Delay factor for send_command_timing. Relevant only if `use_timing` is True.",
+    )
+    max_loops: Optional[int] = Field(
+        None,
+        description="Maximum number of loops for send_command_timing. Relevant only if `use_timing` is True.",
+    )
+    read_timeout: Optional[float] = Field(
+        None,
+        description="Read timeout for send_command_timing. Relevant only if `use_timing` is True.",
+    )
+
+    @validator("delay_factor", always=True)
+    def set_delay_factor(cls, v, values):
+        if values.get("use_timing"):
+            return v if v is not None else 1.0
+        return None
+
+    @validator("max_loops", always=True)
+    def set_max_loops(cls, v, values):
+        if values.get("use_timing"):
+            return v if v is not None else 150
+        return None
+
+    @validator("read_timeout", always=True)
+    def set_read_timeout(cls, v, values):
+        if values.get("use_timing"):
+            return v if v is not None else 30.0
+        return None
+
+
 class CommandSequenceInfo(BaseModel):
     device_type: str = Field(..., description="Type of the network device")
     host: str = Field(..., description="Hostname or IP address of the device")
-    commands: List[str] = Field(
+    commands: List[Command] = Field(
         ..., description="List of commands to execute on the device"
     )
-    i_conducted_a_online_search_before_this_request: bool = Field(..., description="Indicates if an online search was performed before sending commands")
+    i_conducted_a_online_search_before_this_request: bool = Field(
+        ...,
+        description="Indicates if an online search was performed before sending commands",
+    )
 
     @validator("device_type")
     def validate_device_type(cls, v):
@@ -163,7 +204,12 @@ async def send_commands(
     if not command_sequence_info.i_conducted_a_online_search_before_this_request:
         raise HTTPException(
             status_code=400,
-            detail="Online documentation must be consulted before sending commands. Set 'i_conducted_a_online_search_before_this_request' to True after consulting and reset it to False after completion of one intent or when encountering errors. After online search you can try again.",
+            detail=(
+                "Online documentation must be consulted before sending commands. "
+                "Set 'i_conducted_a_online_search_before_this_request' to True after consulting and "
+                "reset it to False after completion of one intent or when encountering errors. "
+                "After online search you can try again."
+            ),
         )
 
     try:
@@ -186,9 +232,29 @@ async def send_commands(
         }
         connection = ConnectHandler(**device)
         output = {}
-        for command in command_sequence_info.commands:
-            command_output = connection.send_command(command)
-            output[command] = command_output
+        for cmd in command_sequence_info.commands:
+            if cmd.use_timing:
+                try:
+                    command_output = connection.send_command_timing(
+                        cmd.command,
+                        delay_factor=cmd.delay_factor,
+                        max_loops=cmd.max_loops,
+                        read_timeout=cmd.read_timeout,
+                        strip_prompt=True,
+                        strip_command=True,
+                    )
+                except Exception as e:
+                    logger.error(
+                        f"Error executing interactive command '{cmd.command}': {e}"
+                    )
+                    command_output = f"Error executing command: {str(e)}"
+            else:
+                try:
+                    command_output = connection.send_command(cmd.command)
+                except Exception as e:
+                    logger.error(f"Error executing command '{cmd.command}': {e}")
+                    command_output = f"Error executing command: {str(e)}"
+            output[cmd.command] = command_output
         connection.disconnect()
         return {"output": output}
     except NetMikoTimeoutException as e:
@@ -384,4 +450,3 @@ async def get_custom_openapi_spec():
                 }
 
     return openapi_schema
-

@@ -1,0 +1,52 @@
+name: Deploy static content to Pages
+
+on:
+  push:
+    branches: ["main"]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js (optional, if you have JS build step)
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Build your site (optional, if you need to build)
+        run: |
+          # Hier kannst du ein Build-Skript ausführen, falls du z.B. einen Static Site Generator verwendest
+          # z.B. für Jekyll, Hugo, Gatsby, etc.
+          # npm install && npm run build
+          echo "Building project..."
+
+      - name: Move evaluation to root (important!)
+        run: |
+          mkdir -p deploy
+          cp -r evaluation/* deploy/
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./deploy"
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

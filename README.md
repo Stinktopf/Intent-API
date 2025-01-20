@@ -12,6 +12,11 @@ This tool is **not** intended for use in production environments, as it achieves
 - **NetBox Integration**: Interact with NetBox to retrieve, create, update, and delete network-related data.
 - **Authentication**: Basic HTTP authentication for accessing the API endpoints.
 
+## Resources
+
+- **Evaluation protocol:** The full evaluation protocol can be found [here](https://stinktopf.github.io/Intent-API/).
+- **Examples:** Example interactions with the Custom GPT are available [here](./examples/).
+
 ## Setup
 
 ### Prerequisites
