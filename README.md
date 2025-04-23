@@ -28,6 +28,15 @@ Before running Intent API, ensure you have the following prerequisites installed
 - [ngrok](https://ngrok.com/download)
 - [Docker](https://docs.docker.com/) and [Containerlab](https://containerlab.dev/install/) (for infrastructure setup)
 
+### Setup
+
+Install Python, e.g., in a [WSL-Containerlab](https://github.com/srl-labs/WSL-Containerlab):
+
+   ```bash
+   sudo apt update
+   sudo apt install python3 python3-pip python3-venv -y
+   ```
+
 ### Installation
 
 1. Clone the repository:
@@ -40,6 +49,8 @@ Before running Intent API, ensure you have the following prerequisites installed
 2. Install dependencies:
 
    ```bash
+   python3 -m venv venv
+   source venv/bin/activate
    pip install -r requirements.txt
    ```
 
@@ -48,6 +59,7 @@ Before running Intent API, ensure you have the following prerequisites installed
 1. Use Containerlab to deploy the network infrastructure:
 
    ```bash
+   cd lab
    sudo containerlab deploy
    ```
 
