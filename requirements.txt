@@ -1,6 +1,7 @@
-fastapi==0.115.6
+uvicor==0.34.2
+fastapi==0.115.12
 netmiko==4.5.0
 ngrok==1.4.0
-pydantic==2.10.5
+pydantic==2.11.3
 pynetbox==7.4.1
-python-dotenv==1.0.1
+python-dotenv==1.1.0
