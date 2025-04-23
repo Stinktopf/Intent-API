@@ -1,4 +1,4 @@
-uvicor==0.34.2
+uvicorn==0.34.2
 fastapi==0.115.12
 netmiko==4.5.0
 ngrok==1.4.0
